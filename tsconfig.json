@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler", // Or "node" if using older node versions
+    "target": "ESNext",
+    "noEmit": true, // esbuild handles the emit, not tsc
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true, // Required for esbuild's 1-1 transpilation
+  },
+}

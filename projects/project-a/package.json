@@ -1,0 +1,12 @@
+{
+  "name": "project-a",
+  "version": "1.0.0",
+    "type": "module",
+  "private": true,
+  "scripts": {
+    "build:js": "node ../../scripts/build-logic.js",
+    "build:css": "postcss src/*.css -d dist/css --config ../../",
+    "build": "npm run build:js && npm run build:css",
+    "watch": "node ../../scripts/build-logic.js --watch"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "folders": [
+    { "path": "projects/project-a" },
+    { "path": "projects/project-b" },
+    { "path": "." } // Includes the root so tools are discovered
+  ],
+  "settings": {
+    "biome.configPath": "../../biome.json"
+  }
+}
