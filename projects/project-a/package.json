@@ -4,9 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build:js": "node ../../scripts/build-logic.js",
+    "build:js": "node ../../scripts/build.js",
     "build:css": "postcss src/*.css -d dist/css --config ../../",
     "build": "pnpm run build:js && pnpm run build:css",
-    "watch": "node ../../scripts/build-logic.js --watch"
+    "watch": "node ../../scripts/build.js --watch"
   }
 }
