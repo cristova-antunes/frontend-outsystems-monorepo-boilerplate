@@ -3,69 +3,92 @@ import { globSync } from "glob";
 import path from "node:path";
 import fs from "node:fs";
 import process from "node:process";
+import chokidar from "chokidar";
 
-async function runBuild() {
+const isWatch = process.argv.includes("--watch");
+
+async function buildFile(entry) {
 	const projectRoot = process.cwd();
-	const sourceDir = path.join(projectRoot, "source", "scripts");
-	const outdir = path.join(projectRoot, "dist");
+	const sourceDir = path.resolve(projectRoot, "source", "scripts");
+	const outdir = path.resolve(projectRoot, "dist");
 
-	// Find all entry points (index.ts files)
-	const entryPoints = globSync("source/scripts/**/index.ts", {
-		absolute: true,
-	});
+	// Ensure entry is absolute for consistent path math
+	const absoluteEntry = path.resolve(entry);
+	const folderName = path.basename(path.dirname(absoluteEntry));
+	const namespace = folderName.replace(/[^a-zA-Z0-9]/g, "_");
 
-	if (entryPoints.length === 0) {
-		console.log(`No TypeScript files found in ${sourceDir}`);
-		return;
+	const relativePath = path.relative(sourceDir, path.dirname(absoluteEntry));
+	const fileName = `${path.basename(absoluteEntry, path.extname(absoluteEntry))}.js`;
+	const finalOutPath = path.join(outdir, relativePath, fileName);
+
+	try {
+		await esbuild.build({
+			entryPoints: [absoluteEntry],
+			bundle: true,
+			minify: true,
+			minifyIdentifiers: false,
+			minifySyntax: true,
+			minifyWhitespace: true,
+			target: "es2020",
+			format: "iife",
+			globalName: namespace,
+			outfile: finalOutPath,
+			sourcemap: false,
+			logLevel: "error",
+		});
+
+		const relSrc = path
+			.relative(projectRoot, absoluteEntry)
+			.replace(/\\/g, "/");
+		const content = fs.readFileSync(finalOutPath, "utf8");
+		const marker = `// Source: ${relSrc} | Namespace: ${namespace}\n`;
+		fs.writeFileSync(finalOutPath, marker + content, "utf8");
+
+		console.log(`[${new Date().toLocaleTimeString()}] ⚡ Built ${namespace}`);
+	} catch (err) {
+		console.error(`❌ Build failed for ${namespace}`);
 	}
-
-	console.log(`⚡ Building ${entryPoints.length} components...`);
-
-	for (const entry of entryPoints) {
-		// 1. Determine the folder name to use as a unique Global Namespace
-		// e.g., source/scripts/feature-a/index.ts -> feature_a
-		const folderName = path.basename(path.dirname(entry));
-		const namespace = folderName.replace(/[^a-zA-Z0-9]/g, "_");
-
-		// 2. Calculate output path for the source comment logic
-		const relativePath = path.relative(sourceDir, path.dirname(entry));
-		const fileName = `${path.basename(entry, path.extname(entry))}.js`;
-		const finalOutPath = path.join(outdir, relativePath, fileName);
-
-		try {
-			await esbuild.build({
-				entryPoints: [entry],
-				bundle: true,
-				minify: true,
-				// Keeps your function names like 'generateTestData' intact
-				minifyIdentifiers: false,
-				minifySyntax: true,
-				minifyWhitespace: true,
-				target: "es2020",
-				format: "iife", // Best for direct copy-paste into OutSystems
-				globalName: namespace,
-				outfile: finalOutPath, // Use outfile for precision in a loop
-				sourcemap: false,
-				logLevel: "error",
-			});
-
-			// 3. Prepend source path comment
-			if (fs.existsSync(finalOutPath)) {
-				const relSrc = path.relative(projectRoot, entry).replace(/\\/g, "/");
-				const content = fs.readFileSync(finalOutPath, "utf8");
-				const marker = `// Source: ${relSrc} | Namespace: ${namespace}\n`;
-
-				if (!content.startsWith("// Source:")) {
-					fs.writeFileSync(finalOutPath, marker + content, "utf8");
-				}
-			}
-		} catch (err) {
-			console.error(`❌ Failed to build ${namespace}:`, err);
-			process.exit(1);
-		}
-	}
-
-	console.log("✅ Build complete. Ready for OutSystems.");
 }
 
-runBuild();
+async function run() {
+	const projectRoot = process.cwd();
+	// Use absolute path for the glob
+	const entryPattern = path
+		.resolve(projectRoot, "source/scripts/**/index.ts")
+		.replace(/\\/g, "/");
+	const files = globSync(entryPattern);
+
+	console.log(
+		isWatch ? "🔭 Watch mode active..." : "⚡ Building components...",
+	);
+	for (const file of files) await buildFile(file);
+
+	if (isWatch) {
+		// Watch the whole directory using an absolute path
+		const watchPath = path
+			.resolve(projectRoot, "source/scripts")
+			.replace(/\\/g, "/");
+
+		const watcher = chokidar.watch(watchPath, {
+			persistent: true,
+			ignoreInitial: true,
+			ignored: "**/node_modules/**",
+		});
+
+		watcher.on("all", (event, filePath) => {
+			// If any .ts file changes, find its parent index.ts
+			if (filePath.endsWith(".ts")) {
+				const dir = path.dirname(filePath);
+				const indexFile = path.join(dir, "index.ts");
+
+				if (fs.existsSync(indexFile)) {
+					buildFile(indexFile);
+				}
+			}
+		});
+
+		watcher.on("error", (error) => console.error(`Watcher error: ${error}`));
+	}
+}
+
+run();

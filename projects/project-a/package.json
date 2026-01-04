@@ -1,12 +1,12 @@
 {
-  "name": "project-a",
-  "version": "1.0.0",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "build:js": "node ../../scripts/build.js",
-    "build:css": "postcss src/*.css -d dist/css --config ../../",
-    "build": "pnpm run build:js && pnpm run build:css",
-    "watch": "node ../../scripts/build.js --watch"
-  }
+	"name": "project-a",
+	"version": "1.0.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build:js": "node ../../scripts/build.js",
+    "watch:js": "node ../../scripts/build.js --watch",
+		"build:css": "postcss src/*.css -d dist/css --config ../../",
+		"build": "pnpm run build:js && pnpm run build:css"
+	}
 }

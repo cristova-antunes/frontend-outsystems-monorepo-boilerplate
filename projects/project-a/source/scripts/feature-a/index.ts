@@ -8,5 +8,7 @@ export function generateTestData() {
 		},
 	];
 
-	return data;
+	const idCounter = 5;
+
+	return { data, idCounter };
 }
