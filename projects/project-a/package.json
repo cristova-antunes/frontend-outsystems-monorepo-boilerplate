@@ -5,8 +5,8 @@
 	"private": true,
 	"scripts": {
 		"build:js": "node ../../scripts/build.js",
-    "watch:js": "node ../../scripts/build.js --watch",
-		"build:css": "postcss src/*.css -d dist/css --config ../../",
+		"watch:js": "node ../../scripts/build.js --watch",
+		"build:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js",
 		"build": "pnpm run build:js && pnpm run build:css"
 	}
 }

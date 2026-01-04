@@ -51,7 +51,8 @@
     "postcss-pxtorem": "^6.1.0",
     "postcss-safe-parser": "^7.0.1",
     "postcss-simple-vars": "^7.0.1",
-    "stylelint": "^16.26.1"
+    "stylelint": "^16.26.1",
+    "stylelint-config-standard": "^39.0.1"
   },
   "dependencies": {
     "chokidar": "^5.0.0"

@@ -10,7 +10,7 @@ const isWatch = process.argv.includes("--watch");
 async function buildFile(entry) {
 	const projectRoot = process.cwd();
 	const sourceDir = path.resolve(projectRoot, "source", "scripts");
-	const outdir = path.resolve(projectRoot, "dist");
+	const outdir = path.resolve(projectRoot, "dist/scripts");
 
 	// Ensure entry is absolute for consistent path math
 	const absoluteEntry = path.resolve(entry);
@@ -46,7 +46,7 @@ async function buildFile(entry) {
 
 		console.log(`[${new Date().toLocaleTimeString()}] ⚡ Built ${namespace}`);
 	} catch (err) {
-		console.error(`❌ Build failed for ${namespace}`);
+		console.error(`❌ Build failed for ${namespace}:`, err);
 	}
 }
 
@@ -75,7 +75,7 @@ async function run() {
 			ignored: "**/node_modules/**",
 		});
 
-		watcher.on("all", (event, filePath) => {
+		watcher.on("all", (_, filePath) => {
 			// If any .ts file changes, find its parent index.ts
 			if (filePath.endsWith(".ts")) {
 				const dir = path.dirname(filePath);
