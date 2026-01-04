@@ -71,6 +71,68 @@ pnpm run check:all   # Check for errors
 pnpm run format:all  # Auto-format all files
 ```
 
+### Editor Setup (VS Code) 🔧
+
+To ensure Biome works correctly in VS Code:
+
+- Install the **Biome** extension from the VS Code Marketplace (open Extensions → search for "Biome" → Install).
+- **Enable the extension for this workspace** (open the extension and choose **Enable (Workspace)**).
+- The workspace already points to the shared config via `.vscode/monorepo.code-workspace` (`"biome.configPath": "../../biome.json"`), so Biome will pick up the project rules automatically.
+- Optional: make Biome the default formatter and enable format on save by adding to your user or workspace settings:
+
+```json
+{
+  "editor.formatOnSave": true,
+  "[javascript]": { "editor.defaultFormatter": "biome" },
+  "[typescript]": { "editor.defaultFormatter": "biome" }
+}
+```
+
+---
+
+### Adding a new project to this workspace ➕
+
+Follow these steps to add a new package to the monorepo:
+
+1. Create the folder structure:
+
+```bash
+mkdir -p projects/my-new-project/source
+mkdir -p projects/my-new-project/dist
+```
+
+2. Add a minimal `package.json` at `projects/my-new-project/package.json` (example):
+
+```json
+{
+  "name": "my-new-project",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build:js": "node ../../scripts/build.js",
+    "watch:js": "node ../../scripts/build.js --watch",
+    "build:css": "postcss src/*.css -d dist/css --config ../../",
+    "build": "pnpm run build:js && pnpm run build:css"
+  }
+}
+```
+
+Adjust the scripts/paths to match whether you use `source/` or `src/` in your package.
+
+3. Add the project to the workspace file `.vscode/monorepo.code-workspace` by adding an entry to the `folders` array:
+
+```jsonc
+{ "path": "projects/my-new-project" }
+```
+
+4. Reload VS Code (Developer: Reload Window) so the workspace recognizes the new folder.
+
+> Note: After adding dependencies, run `pnpm install` from the repository root so new packages are available to the workspace.
+
+---
+
+
 ## 📝 OutSystems Integration Workflow
 
 1.  **Develop:** Write your logic in the `src/` folder of the respective package using TypeScript.
