@@ -24,6 +24,18 @@
 			"quoteStyle": "double"
 		}
 	},
+	"css": {
+    "formatter": {
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineEnding": "lf",
+      "quoteStyle": "double"
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
 	"assist": {
 		"enabled": true,
 		"actions": {

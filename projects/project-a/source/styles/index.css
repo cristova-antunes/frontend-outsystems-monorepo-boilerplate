@@ -2,9 +2,23 @@
     margin-top: 3rem;
 }
 
+/* Tests */
 .test-header {
     font-size: 2rem;
-    color: #333;
+    color: #fff;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    &::after {
+        content: " 🚀";
+    }
+
+    .phone & {
+        color: blue;
+    }
 }
 
 .pink {

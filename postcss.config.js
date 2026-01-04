@@ -6,7 +6,6 @@ import postcssSimpleVars from "postcss-simple-vars";
 import postcssPxtorem from "postcss-pxtorem";
 import postcssPresetEnv from "postcss-preset-env";
 import postcssCombineDuplicatedSelectors from "postcss-combine-duplicated-selectors";
-import postcssDiscardComments from "postcss-discard-comments";
 import cssnano from "cssnano";
 import perfectionist from "postcss-perfectionist"; // For the "middle-ground" format
 
@@ -19,22 +18,15 @@ export default {
 		postcssSimpleVars(),
 		postcssPxtorem({
 			propList: ["*"],
-			mediaQuery: false,
 		}),
 		postcssPresetEnv({
 			stage: 1,
 			features: {
-				"nesting-rules": false, // Handled by postcss-nested for better control
+				"nesting-rules": true,
 				"custom-properties": true,
 			},
 		}),
 		postcssCombineDuplicatedSelectors(),
-		postcssDiscardComments({ removeAll: true }),
-		// "Middle-ground" formatting:
-		perfectionist({
-			format: "compact", // Options: 'expanded', 'compact', 'compressed'
-			indentSize: 2,
-		}),
 		// Only use cssnano for logic optimizations, not whitespace
 		cssnano({
 			preset: [
@@ -42,11 +34,19 @@ export default {
 				{
 					zindex: false,
 					normalizeWhitespace: false, // Let perfectionist handle this
-					discardComments: false, // Handled above
+					discardComments: { removeAll: true },
 					mergeIdent: true,
 					discardUnused: true,
+					mergeRules: true, // Consolidates your authored code
+					reduceIdents: false,
 				},
 			],
+		}),
+
+		// "Middle-ground" formatting to prevent Outsystems issues with large css files
+		perfectionist({
+			format: "compact", // Options: 'expanded', 'compact', 'compressed'
+			indentSize: 2,
 		}),
 	],
 };

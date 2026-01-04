@@ -1,3 +1,9 @@
 .test{ margin-top:3rem; }
-.test-header{ color:#333; font-size:2rem; }
+.test-header{
+ color:#fff;
+ font-size:2rem;
+}
+.test-header a{ color:inherit; -webkit-text-decoration:none; text-decoration:none; }
+.test-header:after{ content:" 🚀"; }
+.phone .test-header{ color:blue; }
 .pink{ color:purple; }

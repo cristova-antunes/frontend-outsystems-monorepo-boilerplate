@@ -4,12 +4,9 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
+		"lint:css": "stylelint \"source/styles/**/*.css\"",
 		"watch:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js --watch",
 		"watch:js": "node ../../scripts/build.js --watch",
-		"watch:all": "npm-run-all --parallel watch:js watch:css"
-	},
-	"dependencies": {
-		"postcss-discard-comments": "^7.0.5",
-		"postcss-perfectionist": "^2.3.9"
+		"start:css": "npm-run-all --parallel lint:css watch:css"
 	}
 }
