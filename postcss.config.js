@@ -1,50 +1,50 @@
-import postcssCombineDuplicatedSelectors from "postcss-combine-duplicated-selectors";
-import postcssPxtorem from "postcss-pxtorem";
-import postcssPresetEnv from "postcss-preset-env";
-import postcssSafeParser from "postcss-safe-parser";
-import postcssEach from "postcss-each";
-import postcssSimpleVars from "postcss-simple-vars";
 import postcssImportExtGlob from "postcss-import-ext-glob";
 import postcssImport from "postcss-import";
 import postcssMixins from "postcss-mixins";
-import postcssNested from "postcss-nested";
+import postcssEach from "postcss-each";
+import postcssSimpleVars from "postcss-simple-vars";
+import postcssPxtorem from "postcss-pxtorem";
+import postcssPresetEnv from "postcss-preset-env";
+import postcssCombineDuplicatedSelectors from "postcss-combine-duplicated-selectors";
+import postcssDiscardComments from "postcss-discard-comments";
 import cssnano from "cssnano";
-import stylelint from "stylelint";
+import perfectionist from "postcss-perfectionist"; // For the "middle-ground" format
 
 export default {
-	parser: postcssSafeParser,
 	plugins: [
 		postcssImportExtGlob(),
 		postcssImport(),
 		postcssMixins(),
-		postcssNested(),
 		postcssEach(),
 		postcssSimpleVars(),
-		/*
-    postcssSimpleVars({
-      unknown(node, name, result) {
-        // Print out warning if the node still exists at the end.
-        // node.warn(result, "Unknown variable " + name);
-      },
-    }),*/
-
-		postcssCombineDuplicatedSelectors(),
-		postcssPxtorem(),
+		postcssPxtorem({
+			propList: ["*"],
+			mediaQuery: false,
+		}),
 		postcssPresetEnv({
 			stage: 1,
 			features: {
-				"nesting-rules": true,
+				"nesting-rules": false, // Handled by postcss-nested for better control
 				"custom-properties": true,
 			},
-			browsers: "last 2 versions",
 		}),
-		stylelint(),
+		postcssCombineDuplicatedSelectors(),
+		postcssDiscardComments({ removeAll: true }),
+		// "Middle-ground" formatting:
+		perfectionist({
+			format: "compact", // Options: 'expanded', 'compact', 'compressed'
+			indentSize: 2,
+		}),
+		// Only use cssnano for logic optimizations, not whitespace
 		cssnano({
 			preset: [
 				"default",
 				{
-					zindex: false, // don't change z-indices and prevent clash with OSUI z-indices
-					normalizeWhitespace: true,
+					zindex: false,
+					normalizeWhitespace: false, // Let perfectionist handle this
+					discardComments: false, // Handled above
+					mergeIdent: true,
+					discardUnused: true,
 				},
 			],
 		}),

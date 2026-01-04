@@ -4,9 +4,12 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"build:js": "node ../../scripts/build.js",
+		"watch:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js --watch",
 		"watch:js": "node ../../scripts/build.js --watch",
-		"build:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js",
-		"build": "pnpm run build:js && pnpm run build:css"
+		"watch:all": "npm-run-all --parallel watch:js watch:css"
+	},
+	"dependencies": {
+		"postcss-discard-comments": "^7.0.5",
+		"postcss-perfectionist": "^2.3.9"
 	}
 }

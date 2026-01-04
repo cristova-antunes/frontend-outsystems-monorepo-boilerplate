@@ -46,13 +46,15 @@
     "postcss-import": "^16.1.1",
     "postcss-import-ext-glob": "^2.1.1",
     "postcss-mixins": "^12.1.2",
-    "postcss-nested": "^7.0.2",
     "postcss-preset-env": "^10.6.0",
     "postcss-pxtorem": "^6.1.0",
     "postcss-safe-parser": "^7.0.1",
     "postcss-simple-vars": "^7.0.1",
+    	"postcss-discard-comments": "^7.0.5",
+		"postcss-perfectionist": "^2.3.9",
     "stylelint": "^16.26.1",
     "stylelint-config-standard": "^39.0.1"
+    
   },
   "dependencies": {
     "chokidar": "^5.0.0"
