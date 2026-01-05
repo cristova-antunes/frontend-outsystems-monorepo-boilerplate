@@ -82,7 +82,7 @@ importers:
         specifier: ^39.0.1
         version: 39.0.1(stylelint@16.26.1)
 
-  projects/project-a: {}
+  packages/project-a: {}
 
 packages:
 

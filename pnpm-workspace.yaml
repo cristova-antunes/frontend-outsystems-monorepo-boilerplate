@@ -1,4 +1,4 @@
 packages:
-  - 'projects/*'
+  - 'packages/*'
 onlyBuiltDependencies:
   - esbuild

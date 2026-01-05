@@ -19,12 +19,12 @@
     ]
   },
   "workspaces": [
-    "projects/*"
+    "packages/*"
   ],
   "scripts": {
     "build:all": "pnpm run build --workspaces",
-    "check:all": "biome check ./projects",
-    "format:all": "biome format --write ./projects"
+    "check:all": "biome check ./packages",
+    "format:all": "biome format --write ./packages"
   },
   "keywords": [],
   "author": "Cristóvão Antunes",

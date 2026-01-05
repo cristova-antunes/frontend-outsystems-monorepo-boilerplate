@@ -22,7 +22,7 @@ OutSystems does not provide a CLI for direct asset synchronization. This project
 ## 📂 Project Structure
 
 ```text
-├── projects/
+├── packages/
 │   ├── project-a/          # Specific OutSystems Application/Module
 │   │   ├── src/            # Source TS/CSS files
 │   │   └── dist/           # Compiled assets for OutSystems
@@ -48,7 +48,7 @@ pnpm install
 To work on a specific project
 
 ```bash
-cd projects/your-package-name
+cd packages/your-package-name
 pnpm run watch
 ```
 
@@ -97,11 +97,11 @@ Follow these steps to add a new package to the monorepo:
 1. Create the folder structure:
 
 ```bash
-mkdir -p projects/my-new-project/source
-mkdir -p projects/my-new-project/dist
+mkdir -p packages/my-new-project/source
+mkdir -p packages/my-new-project/dist
 ```
 
-2. Add a minimal `package.json` at `projects/my-new-project/package.json` (example):
+2. Add a minimal `package.json` at `packages/my-new-project/package.json` (example):
 
 ```json
 {
@@ -110,11 +110,11 @@ mkdir -p projects/my-new-project/dist
   "type": "module",
   "private": true,
   "scripts": {
-    "build:js": "node ../../scripts/build.js",
-    "watch:js": "node ../../scripts/build.js --watch",
-    "build:css": "postcss src/*.css -d dist/css --config ../../",
-    "build": "pnpm run build:js && pnpm run build:css"
-  }
+		"lint:css": "stylelint \"source/styles/**/*.css\"",
+		"watch:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js --watch",
+		"watch:js": "node ../../scripts/build.js --watch",
+		"start:css": "npm-run-all --parallel lint:css watch:css"
+	}
 }
 ```
 
@@ -123,7 +123,7 @@ Adjust the scripts/paths to match whether you use `source/` or `src/` in your pa
 3. Add the project to the workspace file `.vscode/monorepo.code-workspace` by adding an entry to the `folders` array:
 
 ```jsonc
-{ "path": "projects/my-new-project" }
+{ "path": "packages/my-new-project" }
 ```
 
 4. Reload VS Code (Developer: Reload Window) so the workspace recognizes the new folder.
