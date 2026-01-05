@@ -95,6 +95,11 @@ async function buildFile(entry) {
 	const outdir = path.resolve(projectRoot, "dist/scripts");
 
 	const absoluteEntry = path.resolve(entry);
+	// Make a normalized path relative to project root so consumers can find the source
+	const sourceRelative = path
+		.relative(projectRoot, absoluteEntry)
+		.replace(/\\/g, "/");
+	const bannerComment = `/* Source: ${sourceRelative} */\nwindow.OS_FE_Scripts = window.OS_FE_Scripts || {};`;
 
 	const relativePath = path.relative(sourceDir, path.dirname(absoluteEntry));
 	const fileName = `${path.basename(absoluteEntry, path.extname(absoluteEntry))}.js`;
@@ -110,7 +115,7 @@ async function buildFile(entry) {
 			// This creates a temporary local var inside the IIFE
 			globalName: "tempModule",
 			banner: {
-				js: `window.OS_FE_Scripts = window.OS_FE_Scripts || {};`,
+				js: bannerComment,
 			},
 			// This merges the tempModule exports into the global object
 			footer: {

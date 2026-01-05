@@ -1,3 +1,4 @@
+/* Source: source/scripts/feature-b/index.ts */
 window.OS_FE_Scripts = window.OS_FE_Scripts || {};
 var tempModule=(()=>{var n=Object.defineProperty;var s=Object.getOwnPropertyDescriptor;var p=Object.getOwnPropertyNames;var T=Object.prototype.hasOwnProperty;var c=(e,t)=>{for(var r in t)n(e,r,{get:t[r],enumerable:!0})},d=(e,t,r,o)=>{if(t&&typeof t=="object"||typeof t=="function")for(let a of p(t))!T.call(e,a)&&a!==r&&n(e,a,{get:()=>t[a],enumerable:!(o=s(t,a))||o.enumerable});return e};var f=e=>d(n({},"__esModule",{value:!0}),e);var m={};c(m,{generateTestData1:()=>i});function i(){return[]}return f(m);})();
 Object.assign(window.OS_FE_Scripts, tempModule);
