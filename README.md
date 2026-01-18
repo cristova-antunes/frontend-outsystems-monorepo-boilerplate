@@ -8,15 +8,16 @@ OutSystems does not provide a CLI for direct asset synchronization. This project
 
 - **Write Modern Code:** Use TypeScript (ESNext) and PostCSS.
 - **Maintain 1-1 Mapping:** Every source file in `src/` maps to a single optimized file in `dist/`, making it easy to copy-paste into Service Studio.
-- **Ensure Consistency:** Share linting (Biome), formatting, and build logic across multiple OutSystems modules/themes.
+- **Ensure Consistency:** Share linting (ESLint), formatting (Prettier), and build logic across multiple OutSystems modules/themes.
 - **Performance First:** Use `esbuild` for ultra-fast compilation and minification.
 
 ## 🛠 Tech Stack
 
 - **Runtime:** Node.js (ESM)
-- **Package Manager:** npm Workspaces
+- **Package Manager:** pnpm Workspaces
 - **Compiler:** [esbuild](https://esbuild.github.io/) (Configured for IIFE output)
-- **Linter/Formatter:** [Biome](https://biomejs.dev/)
+- **Linter:** [ESLint](https://eslint.org/)
+- **Formatter:** [Prettier](https://prettier.io/)
 - **CSS Processor:** [PostCSS](https://postcss.org/)
 
 ## 📂 Project Structure
@@ -28,8 +29,11 @@ OutSystems does not provide a CLI for direct asset synchronization. This project
 │   │   └── dist/           # Compiled assets for OutSystems
 │   └── project-b/          # Another Application
 ├── scripts/
-│   └── build-logic.js      # Shared esbuild engine (Dynamic)
-├── biome.json              # Shared linting & formatting rules
+│   ├── build-scripts.js    # Shared esbuild engine for JS compilation
+│   └── build-styles.js     # Shared PostCSS engine for CSS compilation
+├── eslint.config.mjs       # Shared ESLint configuration
+├── stylelint.config.mjs    # Shared stylelint configuration
+├── postcss.config.js       # Shared PostCSS configuration
 └── package.json            # Monorepo configuration & shared dependencies
 ```
 
@@ -45,48 +49,71 @@ pnpm install
 
 ### Developing
 
-To work on a specific project
+To work on a specific project, navigate to the package and use the available scripts:
 
 ```bash
 cd packages/your-package-name
-pnpm run watch
 ```
 
-This will watch for changes in `src/` and automatically update the `dist/` folder.
+#### Scripts
 
-### Build All Projects
-
-To compile all packages in the monorepo at once
+For JavaScript/TypeScript compilation:
 
 ```bash
-pnpm run build:all
+# Watch mode (automatically recompiles on file changes)
+pnpm run watch:js
+
+# Build once
+pnpm run build:js
+```
+
+#### Styling
+
+CSS compilation supports two modes:
+
+```bash
+# Development mode (watch for changes)
+pnpm start:css
+
+# Build mode (optimized for production)
+pnpm build:css
 ```
 
 ### Code Quality
 
-We use Biome for instant linting and formatting.
+We use ESLint for linting and Prettier for code formatting.
 
 ```bash
-pnpm run check:all   # Check for errors
-pnpm run format:all  # Auto-format all files
+pnpm run lint      # Check for linting errors
+pnpm run format    # Auto-format all files with Prettier
 ```
 
 ### Editor Setup (VS Code) 🔧
 
-To ensure Biome works correctly in VS Code:
+#### Local Development
 
-- Install the **Biome** extension from the VS Code Marketplace (open Extensions → search for "Biome" → Install).
-- **Enable the extension for this workspace** (open the extension and choose **Enable (Workspace)**).
-- The workspace already points to the shared config via `.vscode/monorepo.code-workspace` (`"biome.configPath": "../../biome.json"`), so Biome will pick up the project rules automatically.
-- Optional: make Biome the default formatter and enable format on save by adding to your user or workspace settings:
+- Install the **ESLint** extension (dbaeumer.vscode-eslint) from the VS Code Marketplace.
+- Install the **Prettier** extension (esbenp.prettier-vscode) from the VS Code Marketplace.
+- Optional: enable format on save by adding to your workspace settings:
 
 ```json
 {
   "editor.formatOnSave": true,
-  "[javascript]": { "editor.defaultFormatter": "biome" },
-  "[typescript]": { "editor.defaultFormatter": "biome" }
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }
 }
 ```
+
+#### Development Container (Docker)
+
+This project includes Docker dev container configuration for VS Code:
+
+- The dev container uses a **Node.js with TypeScript** image
+- All necessary tools and dependencies are pre-installed
+- To use it, open the project in VS Code and select "Reopen in Container" when prompted, or use the command palette (`Ctrl+Shift+P` → "Dev Containers: Reopen in Container")
+- The container includes all extensions and VS Code settings configured for the project
 
 ---
 
