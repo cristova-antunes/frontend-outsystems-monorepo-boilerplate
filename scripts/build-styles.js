@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import process from "process";
 import postcss from "postcss";
 import postcssConfig from "../postcss.config.js";
 
@@ -7,38 +8,31 @@ const outDir = path.resolve("dist/styles");
 const timestamp = new Date().toLocaleString("pt-PT", { timeZone: "UTC" });
 const isProduction = process.env.NODE_ENV === "production";
 
-const indexFilesPaths = [
-  {
-    input: "source/styles/Travelvety/_index.css",
-    output: "Travelvety_MyPortal_Theme.css",
-  },
-  {
-    input: "source/styles/PDF/_index.css",
-    output: "MyPortal_PDF.css",
-  },
-  {
-    input: "source/styles/Styleguide/_index.css",
-    output: "MyPortal_Styleguide.css",
-  },
-  {
-    input: "source/styles/MyPortal/_index.css",
-    output: "MyPortal_Theme.css",
-  },
-  {
-    input: "source/styles/Shared/_index/TE_Menu.css",
-    output: "shared/TE_Menu.css",
-  },
-  {
-    input: "source/styles/Shared/_index/TE_Theme.css",
-    output: "shared/TE_Theme.css",
-  },
-  {
-    input: "source/styles/Shared/_index/TE_Utilities.css",
-    output: "shared/TE_Utilities.css",
-  },
-];
-
 async function runBuild() {
+  // Parse CLI arguments
+  const args = process.argv.slice(2);
+  const configArgIndex = args.indexOf("--config");
+  let configPath = "./styles.config.js";
+
+  if (configArgIndex !== -1 && args[configArgIndex + 1]) {
+    configPath = args[configArgIndex + 1];
+  }
+
+  // Resolve config path relative to current working directory
+  const resolvedConfigPath = path.resolve(process.cwd(), configPath);
+
+  // Load the config
+  let stylesConfig;
+  try {
+    const configModule = await import(`file://${resolvedConfigPath}`);
+    stylesConfig = configModule.default;
+  } catch (err) {
+    console.error(`❌ Failed to load config from ${resolvedConfigPath}:`, err.message);
+    process.exit(1);
+  }
+
+  const indexFilesPaths = stylesConfig.indexFiles;
+
   const mode = isProduction ? "PRODUCTION (PRD)" : "DEVELOPMENT (DEV)";
   const suffix = isProduction ? ".prd.css" : ".dev.css";
 

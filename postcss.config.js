@@ -10,10 +10,12 @@ import postcssMixins from "postcss-mixins";
 import postcssNested from "postcss-nested";
 import cssnano from "cssnano";
 
+const nodeEnv = process.env.NODE_ENV || "";
+
 export default (ctx) => {
   // Check if we are in production mode
   const isProduction =
-    ctx.env === "production" || process.env.NODE_ENV === "production";
+    ctx.env === "production" || nodeEnv === "production";
 
   return {
     parser: postcssSafeParser,

@@ -5,9 +5,12 @@
   "private": true,
   "scripts": {
     "lint:css": "stylelint \"source/styles/**/*.css\"",
-    "watch:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js --watch",
+    "dev:css": "cross-env NODE_ENV=development node ../../scripts/build-styles.js --config ./styles.config.js && npm run lint:css",
+    "build:css": "cross-env NODE_ENV=production node ../../scripts/build-styles.js --config ./styles.config.js && npm run lint:css",
+    "watch:css": "nodemon --watch source/styles --ext css --exec \"npm run dev:css\"",
+    "lint:ts": "eslint source/scripts --ext .ts",
     "watch:js": "node ../../scripts/build-scripts.js --watch",
-    "start:css": "npm-run-all --parallel lint:css watch:css",
+    "start:css": "npm-run-all --parallel lint:css dev:css watch:css",
     "start:js": "npm-run-all --parallel watch:js"
   }
 }

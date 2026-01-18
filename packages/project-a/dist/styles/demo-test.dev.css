@@ -1,0 +1,29 @@
+/* DEV MODE */
+.test {
+  margin-top: 3rem;
+}
+
+/* Tests */
+
+.test-header {
+  font-size: 2rem;
+  color: #fff;
+}
+
+.test-header a {
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: inherit;
+  }
+
+.test-header::after {
+    content: " 🚀";
+  }
+
+.phone .test-header {
+    color: blue;
+  }
+
+.pink {
+  color: purple;
+}
