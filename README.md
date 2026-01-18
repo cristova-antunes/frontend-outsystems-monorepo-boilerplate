@@ -110,11 +110,11 @@ mkdir -p packages/my-new-project/dist
   "type": "module",
   "private": true,
   "scripts": {
-		"lint:css": "stylelint \"source/styles/**/*.css\"",
-		"watch:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js --watch",
-		"watch:js": "node ../../scripts/build.js --watch",
-		"start:css": "npm-run-all --parallel lint:css watch:css"
-	}
+    "lint:css": "stylelint \"source/styles/**/*.css\"",
+    "watch:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js --watch",
+    "watch:js": "node ../../scripts/build-scripts.js --watch",
+    "start:css": "npm-run-all --parallel lint:css watch:css"
+  }
 }
 ```
 
@@ -132,13 +132,11 @@ Adjust the scripts/paths to match whether you use `source/` or `src/` in your pa
 
 ---
 
-
 ## 📝 OutSystems Integration Workflow
 
 1.  **Develop:** Write your logic in the `src/` folder of the respective package using TypeScript.
 2.  **Compile:** Check the `dist/` folder for the compiled `.js` or `.css` file.
 3.  **Deploy:** \* Open the compiled file in your editor.
-
     - **Copy** the entire content.
     - **Paste** it into the corresponding **Script** or **Style Sheet** editor in OutSystems Service Studio.
 

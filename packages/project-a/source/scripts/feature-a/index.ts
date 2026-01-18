@@ -1,14 +1,14 @@
 import type { Test } from "./types";
 
 export function generateTestData() {
-	const data: Test[] = [
-		{
-			id: 0,
-			name: "manel",
-		},
-	];
+  const data: Test[] = [
+    {
+      id: 0,
+      name: "manel",
+    },
+  ];
 
-	const idCounter = 5;
+  const idCounter = 5;
 
-	return { data, idCounter };
+  return { data, idCounter };
 }

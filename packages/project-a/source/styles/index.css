@@ -1,26 +1,26 @@
 .test {
-    margin-top: 3rem;
+  margin-top: 3rem;
 }
 
 /* Tests */
 .test-header {
-    font-size: 2rem;
-    color: #fff;
+  font-size: 2rem;
+  color: #fff;
 
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 
-    &::after {
-        content: " 🚀";
-    }
+  &::after {
+    content: " 🚀";
+  }
 
-    .phone & {
-        color: blue;
-    }
+  .phone & {
+    color: blue;
+  }
 }
 
 .pink {
-    color: purple;
+  color: purple;
 }

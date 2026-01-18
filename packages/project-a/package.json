@@ -1,13 +1,13 @@
 {
-	"name": "project-a",
-	"version": "1.0.0",
-	"type": "module",
-	"private": true,
-	"scripts": {
-		"lint:css": "stylelint \"source/styles/**/*.css\"",
-		"watch:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js --watch",
-		"watch:js": "node ../../scripts/build.js --watch",
-		"start:css": "npm-run-all --parallel lint:css watch:css",
-		"start:js": "npm-run-all --parallel watch:js"
-	}
+  "name": "project-a",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint:css": "stylelint \"source/styles/**/*.css\"",
+    "watch:css": "postcss \"source/styles/*.css\" --base source/styles -d dist/styles --config ../../postcss.config.js --watch",
+    "watch:js": "node ../../scripts/build-scripts.js --watch",
+    "start:css": "npm-run-all --parallel lint:css watch:css",
+    "start:js": "npm-run-all --parallel watch:js"
+  }
 }
