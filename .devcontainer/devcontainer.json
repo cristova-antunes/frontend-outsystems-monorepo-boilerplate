@@ -1,0 +1,28 @@
+{
+  "name": "base-setup",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node",
+  "features": {},
+  "workspaceMount": "source=C:\\Users\\crstv\\OneDrive\\Área de Trabalho\\frontend-outsystems-monorepo-boilerplate,target=/workspace,type=bind",
+  "workspaceFolder": "/monorepo-boilerplate",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.wordWrap": "on"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "streetsidesoftware.code-spell-checker",
+        "vunguyentuan.vscode-css-variables",
+        "ecmel.vscode-html-css",
+        "vunguyentuan.vscode-postcss",
+        "esbenp.prettier-vscode",
+        "yoavbls.pretty-ts-errors",
+        "stylelint.vscode-stylelint"
+      ]
+    }
+  },
+  "remoteUser": "node"
+}
